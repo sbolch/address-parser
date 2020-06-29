@@ -1,0 +1,5 @@
+{
+    "autoload": {
+        "psr-4": { "d3vy\\AddressParser\\": "src" }
+    }
+}
