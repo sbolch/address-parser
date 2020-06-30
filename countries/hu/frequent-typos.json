@@ -1,0 +1,73 @@
+{
+    " árok ":[
+        " arok "
+    ],
+    " dűlő ":[
+        " dulo ",
+        " dülő "
+    ],
+    " kert ":[
+        "-kert "
+    ],
+    " köz ":[
+        " koz ",
+        " köz.",
+        " köz,",
+        "-köz "
+    ],
+    " krt. ":[
+        " krt",
+        " krt."
+    ],
+    " rkp. ":[
+        " rkp."
+    ],
+    " sétány ":[
+        " setany ",
+        " sétány"
+    ],
+    " sgt. ":[
+        " sgt."
+    ],
+    " tér ":[
+        " ter ",
+        " tèr ",
+        " tèr."
+    ],
+    " u. ":[
+        " str. ",
+        " u ",
+        " U ",
+        " u.",
+        " u,",
+        " u.,",
+        ".u."
+    ],
+    " utca ":[
+        " st ",
+        " str., ",
+        " street ",
+        " uca ",
+        " utc ",
+        " urca ",
+        " utca",
+        " utca,",
+        " utcs ",
+        " útca "
+    ],
+    " út ":[
+        " it ",
+        " ú.",
+        " ut ",
+        " ut.",
+        " ut,",
+        " ut\/",
+        " üt",
+        " út,",
+        " út.",
+        " ùt "
+    ],
+    " útja ":[
+        " utja "
+    ]
+}

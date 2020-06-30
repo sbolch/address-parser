@@ -1,4 +1,10 @@
 {
+    "name": "d3vy/address-parser",
+    "description": "Address parser",
+    "require": {
+        "php": ">=7",
+        "ext-mbstring": "*"
+    },
     "autoload": {
         "psr-4": { "d3vy\\AddressParser\\": "src" }
     }

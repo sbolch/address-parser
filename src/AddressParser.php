@@ -4,44 +4,56 @@ namespace d3vy\AddressParser;
 
 class AddressParser {
 
-    public static function hu($address) {
-        $streetTypes  = StreetTypesGetter::hu();
-        $addressArray = explode(' ', $address);
+    public static function hu($address, $streetTypes) {
+        $frequentTypos = json_decode(file_get_contents(dirname(__DIR__).'/countries/hu/frequent-typos.json'));
 
-        $streetTypePos = count($addressArray) - 1;
-        while(!in_array($addressArray[$streetTypePos], $streetTypes) && $streetTypePos-- > -1);
-
-        $streetType = $addressArray[$streetTypePos];
-
-        $preStreetType = '';
-        for($i = 0; $i < $streetTypePos; $i++) {
-            $preStreetType .= $addressArray[$i].' ';
+        $typolessAddress = $address;
+        foreach($frequentTypos as $right => $wrongs) {
+            foreach($wrongs as $wrong) {
+                $typolessAddress = str_replace($wrong, $right, $typolessAddress);
+                $typolessAddress = str_replace(ucwords($wrong), $right, $typolessAddress);
+                $typolessAddress = str_replace(mb_strtoupper($wrong), $right, $typolessAddress);
+            }
         }
-        $preStreetType = trim($preStreetType);
 
-        preg_match('/([0-9]{4} )?([^,], )?(.*)/',
-            $preStreetType, $matches
-        );
-        list($a, $zip, $city, $street) = $matches;
+        $addressParts = explode(' ', $typolessAddress);
 
-        $postStreetType = '';
-        for($i = $streetTypePos + 1; $i < count($addressArray); $i ++) {
-            $postStreetType .= $addressArray[$i].' ';
+        $streetTypePos = 0;
+        while(!in_array(mb_strtolower($addressParts[$streetTypePos]), $streetTypes) && $streetTypePos++ < count($addressParts) - 1);
+        while(isset($addressParts[$streetTypePos + 1]) && in_array(mb_strtolower($addressParts[$streetTypePos + 1]), $streetTypes)) {
+            $streetTypePos++;
         }
+
+        $streetType = $addressParts[$streetTypePos] ?? '';
+        if(!in_array(mb_strtolower($streetType), $streetTypes)) {
+            throw new AddressException("Unknown address format: $address");
+        }
+
+        $streetTypeUcfirst = ucfirst($streetType);
+        $streetTypeUc      = mb_strtoupper($streetType);
+
+        if(preg_match('/(.*)('.str_replace('.', '\.', "$streetType|$streetTypeUcfirst|$streetTypeUc").')(.*)/', $typolessAddress, $matches)) {
+            list($a, $preStreetType, $b, $postStreetType) = $matches;
+        }
+
+        $preStreetType  = trim($preStreetType);
         $postStreetType = trim($postStreetType);
 
-        preg_match('/([0-9]+)(.*)/',
-            $postStreetType, $matches
-        );
-        list($a, $houseNumber, $houseExtension) = $matches;
+        if(preg_match('/([0-9]{4} )?([^,]+, )?(.*)/', $preStreetType, $matches)) {
+            list($a, $zip, $city, $street) = $matches;
+        }
 
-        return array(
-            'zip'            => $zip,
-            'city'           => $city,
-            'street'         => $street,
+        if(preg_match('/([0-9]+)?(.*)?/', $postStreetType, $matches)) {
+            list($a, $houseNumber, $houseExtension) = $matches;
+        }
+
+        return [
+            'zip'            => $zip ?? '',
+            'city'           => isset($city) && $city ? trim(str_replace(',', '', $city)) : '',
+            'street'         => $street ?? '',
             'streetType'     => $streetType,
-            'houseNumber'    => $houseNumber,
-            'houseExtension' => trim(ltrim($houseExtension, '.'))
-        );
+            'houseNumber'    => isset($houseNumber) && $houseNumber ? trim($houseNumber) : '',
+            'houseExtension' => isset($houseExtension) && $houseExtension ? trim(ltrim($houseExtension, '.,')) : ''
+        ];
     }
 }
