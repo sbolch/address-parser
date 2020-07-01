@@ -3,7 +3,9 @@
     "description": "Address parser",
     "require": {
         "php": ">=7",
-        "ext-mbstring": "*"
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-simplexml": "*"
     },
     "autoload": {
         "psr-4": { "d3vy\\AddressParser\\": "src" }

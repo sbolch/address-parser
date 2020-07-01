@@ -3,17 +3,14 @@
 namespace d3vy\AddressParser;
 
 class Parser {
-    private $country;
+    private $parser;
 
-    private $streetTypes;
-
-    public function __construct($country) {
-        $this->country     = $country;
-        $this->streetTypes = StreetTypesGetter::$country();
+    public function __construct($locale) {
+        $parserClass = "d3vy\AddressParser\Parser\\{$locale}Parser";
+        $this->parser = new $parserClass;
     }
 
-    public function parse($address) {
-        $country = strtolower($this->country);
-        return AddressParser::$country($address, $this->streetTypes);
+    public function parse($address): array {
+        return $this->parser->parse((string)$address);
     }
 }
