@@ -16,8 +16,8 @@
         "-köz "
     ],
     " krt. ":[
-        " krt",
-        " krt."
+        " krt.",
+        " krt"
     ],
     " rkp. ":[
         " rkp."
@@ -41,7 +41,9 @@
         " u.",
         " u,",
         " u.,",
-        ".u."
+        ".u.",
+        " z.",
+        " z "
     ],
     " utca ":[
         " st ",
@@ -50,8 +52,8 @@
         " uca ",
         " utc ",
         " urca ",
-        " utca",
         " utca,",
+        " utca",
         " utcs ",
         " útca "
     ],

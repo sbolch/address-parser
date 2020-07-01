@@ -6,6 +6,7 @@ use d3vy\AddressParser\ParserInterface;
 use d3vy\AddressParser\Exception\AddressException;
 
 class HUParser implements ParserInterface {
+    private $frequentTypos;
     private $streetTypes;
 
     public function __construct() {
@@ -22,24 +23,27 @@ class HUParser implements ParserInterface {
             'krt.', 'krt',
             'ltp.', 'ltp',
             'rkp.', 'rkp',
+            'sgrt.', 'sgrt',
             'sgt.', 'sgt',
             'stny.', 'stny',
             'st.',
             'u.'
         ]);
 
-        $this->streetTypes = array_reverse($this->streetTypes);
+        $this->streetTypes   = array_reverse($this->streetTypes);
+        $this->frequentTypos = json_decode(file_get_contents(dirname(__DIR__).'/../locales/hu/frequent-typos.json'));
     }
 
     public function parse(string $address): array {
-        $frequentTypos = json_decode(file_get_contents(dirname(__DIR__).'/../locales/hu/frequent-typos.json'));
-
         $typolessAddress = $address;
-        foreach($frequentTypos as $right => $wrongs) {
+        foreach($this->frequentTypos as $right => $wrongs) {
             foreach($wrongs as $wrong) {
                 $typolessAddress = str_replace($wrong, $right, $typolessAddress);
                 $typolessAddress = str_replace(ucwords($wrong), $right, $typolessAddress);
                 $typolessAddress = str_replace(mb_strtoupper($wrong), $right, $typolessAddress);
+                if($typolessAddress !== $address) {
+                    break;
+                }
             }
         }
 
