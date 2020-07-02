@@ -53,7 +53,7 @@ class HUParser implements ParserInterface {
             throw new AddressException("Unknown address format: $address");
         }
 
-        if(preg_match('/(.*?) '.str_replace('.', '\.', $streetType).' (.*)/i', $typolessAddress, $matches)) {
+        if(preg_match('/(.*? )?'.str_replace('.', '\.', $streetType).'(.*)/i', $typolessAddress, $matches)) {
             list($x, $preStreetType, $postStreetType) = $matches;
         }
 
