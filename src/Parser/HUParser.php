@@ -46,36 +46,26 @@ class HUParser implements ParserInterface {
                 }
             }
         }
+        $typolessAddress = preg_replace('/ +/', ' ', $typolessAddress);
 
-        $addressParts = explode(' ', $typolessAddress);
-
-        $streetTypePos = 0;
-        while(!in_array(mb_strtolower($addressParts[$streetTypePos]), $this->streetTypes) && $streetTypePos++ < count($addressParts) - 1);
-        while(isset($addressParts[$streetTypePos + 1]) && in_array(mb_strtolower($addressParts[$streetTypePos + 1]), $this->streetTypes)) {
-            $streetTypePos++;
-        }
-
-        $streetType = $addressParts[$streetTypePos] ?? '';
+        $streetType = $this->getStreetType($typolessAddress);
         if(!in_array(mb_strtolower($streetType), $this->streetTypes)) {
             throw new AddressException("Unknown address format: $address");
         }
 
-        $streetTypeUcfirst = ucfirst($streetType);
-        $streetTypeUc      = mb_strtoupper($streetType);
-
-        if(preg_match('/(.*)('.str_replace('.', '\.', "$streetType|$streetTypeUcfirst|$streetTypeUc").')(.*)/', $typolessAddress, $matches)) {
-            list($a, $preStreetType, $b, $postStreetType) = $matches;
+        if(preg_match('/(.*?) '.str_replace('.', '\.', $streetType).' (.*)/i', $typolessAddress, $matches)) {
+            list($x, $preStreetType, $postStreetType) = $matches;
         }
 
-        $preStreetType  = trim($preStreetType);
-        $postStreetType = trim($postStreetType);
+        $preStreetType  = trim($preStreetType ?? '');
+        $postStreetType = trim($postStreetType ?? '');
 
         if(preg_match('/([0-9]{4} )?([^,]+, )?(.*)/', $preStreetType, $matches)) {
-            list($a, $zip, $city, $street) = $matches;
+            list($x, $zip, $city, $street) = $matches;
         }
 
         if(preg_match('/([0-9]+)?(.*)?/', $postStreetType, $matches)) {
-            list($a, $houseNumber, $houseExtension) = $matches;
+            list($x, $houseNumber, $houseExtension) = $matches;
         }
 
         return [
@@ -86,5 +76,23 @@ class HUParser implements ParserInterface {
             'houseNumber'     => trim($houseNumber ?? ''),
             'houseNumberInfo' => trim(ltrim($houseExtension ?? '', '.,'))
         ];
+    }
+
+    private function getStreetType(string $address): string {
+        $addressParts = explode(' ', $address);
+
+        $streetTypePos = 0;
+        while(!in_array(mb_strtolower($addressParts[$streetTypePos]), $this->streetTypes) && $streetTypePos++ < count($addressParts) - 1);
+
+        if(isset($addressParts[$streetTypePos + 1]) && !preg_match('/[0-9](.*)/', $addressParts[$streetTypePos + 1])) {
+            for($i = $streetTypePos + 1; $i < count($addressParts) - 1; $i++) {
+                if(in_array(mb_strtolower($addressParts[$i]), $this->streetTypes) && preg_match('/[0-9](.*)/', $addressParts[$i + 1])) {
+                    $streetTypePos = $i;
+                    break;
+                }
+            }
+        }
+
+        return $addressParts[$streetTypePos] ?? '';
     }
 }
