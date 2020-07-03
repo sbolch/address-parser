@@ -1,0 +1,31 @@
+# Address Parser
+
+> Can parse a physical address into its elements.
+
+## Installation
+
+Open a command console, enter your project directory and execute the
+following command to download the latest stable version of this package:
+
+```console
+$ composer require d3vy/address-parser
+```
+
+This command requires you to have Composer installed globally, as explained
+in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
+of Composer documentation.
+
+## Usage
+
+```php
+$locale = 'HU';
+$parser = new \d3vy\AddressParser\Parser($locale);
+
+$parser->parse('1152 Budapest, Szentmihályi út 167');
+```
+
+Note: Only Hungarian address format is supported yet. You can request another
+locale for me to do or create a pull request by implementing
+\d3vy\AddressParser\ParserInterface into \d3vy\AddressParser\Parser namespace
+with your own locale's class. You can place your custom files into the
+locales folder under your locale.

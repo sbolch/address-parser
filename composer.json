@@ -1,6 +1,17 @@
 {
     "name": "d3vy/address-parser",
     "description": "Address parser",
+    "keywords": ["address", "parse"],
+    "type": "package",
+    "license": "MIT",
+    "homepage": "https://github.com/d3vy/address-parser",
+    "authors": [
+        {
+            "name": "Szabolcs Surányi",
+            "email": "szabolcs.suranyi@shadesoft.hu",
+            "homepage": "https://shadesoft.dev"
+        }
+    ],
     "require": {
         "php": ">=7",
         "ext-json": "*",
