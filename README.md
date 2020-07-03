@@ -1,6 +1,6 @@
 # Address Parser
 
-> Can parse a physical address into its elements.
+> Can parse a physical address into its parts.
 
 ## Installation
 
@@ -22,6 +22,19 @@ $locale = 'HU';
 $parser = new \d3vy\AddressParser\Parser($locale);
 
 $parser->parse('1152 Budapest, Szentmihályi út 167');
+
+/*
+This returns:
+Array
+(
+    [zip] => 1152
+    [city] => Budapest
+    [street] => Szentmihályi
+    [streetType] => út
+    [houseNumber] => 167
+    [houseNumberInfo] =>
+)
+*/
 ```
 
 Note: Only Hungarian address format is supported yet. You can request another
