@@ -1,5 +1,5 @@
 <?php
 
-namespace d3vy\AddressParser\Exception;
+namespace sbolch\AddressParser\Exception;
 
 class AddressException extends \Exception {}

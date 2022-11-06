@@ -1,10 +1,10 @@
 {
-    "name": "d3vy/address-parser",
+    "name": "sbolch/address-parser",
     "description": "Address parser",
     "keywords": ["address", "parse"],
     "type": "package",
     "license": "MIT",
-    "homepage": "https://github.com/d3vy/address-parser",
+    "homepage": "https://github.com/sbolch/address-parser",
     "authors": [
         {
             "name": "Szabolcs Surányi",
@@ -13,12 +13,12 @@
         }
     ],
     "require": {
-        "php": ">=7",
+        "php": ">=7.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-simplexml": "*"
     },
     "autoload": {
-        "psr-4": { "d3vy\\AddressParser\\": "src" }
+        "psr-4": { "sbolch\\AddressParser\\": "src" }
     }
 }

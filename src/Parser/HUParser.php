@@ -1,9 +1,9 @@
 <?php
 
-namespace d3vy\AddressParser\Parser;
+namespace sbolch\AddressParser\Parser;
 
-use d3vy\AddressParser\ParserInterface;
-use d3vy\AddressParser\Exception\AddressException;
+use sbolch\AddressParser\ParserInterface;
+use sbolch\AddressParser\Exception\AddressException;
 
 class HUParser implements ParserInterface {
     private $frequentTypos;
@@ -34,6 +34,9 @@ class HUParser implements ParserInterface {
         $this->frequentTypos = json_decode(file_get_contents(dirname(__DIR__).'/../locales/hu/frequent-typos.json'));
     }
 
+    /**
+     * @throws AddressException
+     */
     public function parse(string $address): array {
         $typolessAddress = $address;
         foreach($this->frequentTypos as $right => $wrongs) {
@@ -54,18 +57,18 @@ class HUParser implements ParserInterface {
         }
 
         if(preg_match('/(.*? )?'.str_replace('.', '\.', $streetType).'(.*)/i', $typolessAddress, $matches)) {
-            list($x, $preStreetType, $postStreetType) = $matches;
+            list(, $preStreetType, $postStreetType) = $matches;
         }
 
         $preStreetType  = trim($preStreetType ?? '');
         $postStreetType = trim($postStreetType ?? '');
 
         if(preg_match('/([0-9]{4} )?([^,]+, )?(.*)/', $preStreetType, $matches)) {
-            list($x, $zip, $city, $street) = $matches;
+            list(, $zip, $city, $street) = $matches;
         }
 
         if(preg_match('/([0-9]+)?(.*)?/', $postStreetType, $matches)) {
-            list($x, $houseNumber, $houseExtension) = $matches;
+            list(, $houseNumber, $houseExtension) = $matches;
         }
 
         return [

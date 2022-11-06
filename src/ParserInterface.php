@@ -1,6 +1,6 @@
 <?php
 
-namespace d3vy\AddressParser;
+namespace sbolch\AddressParser;
 
 interface ParserInterface {
     public function parse(string $address): array;

@@ -1,6 +1,6 @@
 <?php
 
-namespace d3vy\AddressParser;
+namespace sbolch\AddressParser;
 
 class Parser {
     private $parser;
