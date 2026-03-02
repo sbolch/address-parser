@@ -2,13 +2,12 @@
     "name": "sbolch/address-parser",
     "description": "Address parser",
     "keywords": ["address", "parse"],
-    "type": "package",
     "license": "MIT",
     "homepage": "https://github.com/sbolch/address-parser",
     "authors": [
         {
             "name": "Szabolcs Surányi",
-            "email": "arnyek@arnyek.hu"
+            "email": "sbolch@pm.me"
         }
     ],
     "require": {
